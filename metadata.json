@@ -1,0 +1,6 @@
+{
+  "name": "Statistic Tracker",
+  "description": "An elegant, dark-themed single-page application to track, visualize, and manage custom statistics over time with interactive charts, inline editing, and CSV export/import.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
