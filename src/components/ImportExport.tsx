@@ -1,24 +1,24 @@
 import { useRef } from "react";
-import { exportToCSV, parseCSV } from "../utils/csv";
 import { Download, Upload } from "lucide-react";
 import { StatEntry } from "../types";
-
-const FILE_EXTENSION = "CSV";
+import { FileExtension } from "../constants";
 
 type ImportExportProps = {
+  importFunc: (file: ArrayBuffer | string) => Promise<Omit<StatEntry, "id">[]>;
   onUpdateEntries: (newEntries: StatEntry[]) => void;
-  onExport: (
-    exportFunc: (entries: StatEntry[], filename?: string) => void,
-  ) => void;
+  onExport: () => void;
   onError: (message: string) => void;
   onSuccess: (message: string) => void;
+  fileExtension: FileExtension;
 };
 
 export const ImportExport = ({
+  importFunc,
   onExport,
   onError,
   onUpdateEntries,
   onSuccess,
+  fileExtension,
 }: ImportExportProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,15 +31,15 @@ export const ImportExport = ({
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       try {
-        const text = event.target?.result as string;
+        const text = event.target?.result;
         if (!text) {
           onError("Could not read file content.");
           return;
         }
 
-        const parsed = parseCSV(text);
+        const parsed = await importFunc(text);
         if (parsed.length === 0) {
           onError(
             "No valid rows found in the provided file. Make sure it contains Date and Value.",
@@ -67,7 +67,7 @@ export const ImportExport = ({
           `Successfully imported and merged ${newEntries.length} entries!`,
         );
       } catch (err) {
-        console.error(`Error importing ${FILE_EXTENSION}:`, err);
+        console.error(`Error importing ${fileExtension}:`, err);
         onError("Failed to parse file. Ensure valid columns.");
       }
     };
@@ -86,27 +86,27 @@ export const ImportExport = ({
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept={`.${FILE_EXTENSION.toLowerCase()}`}
+        accept={`${fileExtension.toLowerCase()}`}
         className="hidden"
         id="file-selector"
       />
       <button
         onClick={handleImportClick}
         className="flex items-center gap-1.5 text-xs font-medium bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] text-[#a1a1aa] hover:text-[#fafafa] px-3 py-1.5 rounded transition-all cursor-pointer"
-        title={`Upload existing dataset via ${FILE_EXTENSION}`}
+        title={`Upload existing dataset via ${fileExtension}`}
         id="import-from-file-action"
       >
         <Download className="w-3.5 h-3.5 text-blue-500" />
-        <span>Import from {FILE_EXTENSION}</span>
+        <span>Import from {fileExtension}</span>
       </button>
       <button
-        onClick={() => onExport(exportToCSV)}
+        onClick={onExport}
         className="flex items-center gap-1.5 text-xs font-medium bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] text-[#a1a1aa] hover:text-[#fafafa] px-3 py-1.5 rounded transition-all cursor-pointer"
-        title={`Download entries as ${FILE_EXTENSION}`}
+        title={`Download entries as ${fileExtension}`}
         id="export-to-file-action"
       >
         <Upload className="w-3.5 h-3.5 text-blue-500" />
-        <span>Export to {FILE_EXTENSION}</span>
+        <span>Export to {fileExtension}</span>
       </button>
     </div>
   );

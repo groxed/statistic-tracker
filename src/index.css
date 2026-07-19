@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -12,3 +12,14 @@ body {
   color: #f4f4f5; /* zinc-100 */
 }
 
+select {
+  /* Tells the browser to render native dropdown parts in dark mode */
+  color-scheme: dark;
+
+  /* Standard styling for the visible select box */
+  background-color: #121212;
+  color: #ffffff;
+  border: 1px solid #333333;
+  padding: 8px;
+  border-radius: 4px;
+}

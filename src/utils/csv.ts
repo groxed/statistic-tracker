@@ -5,7 +5,7 @@ import { StatEntry } from "../types";
  */
 export function exportToCSV(
   entries: StatEntry[],
-  filename = "timeseries_statistics.csv",
+  filename = "timeseries_statistics",
 ) {
   // Sort entries by date before export
   const sortedEntries = [...entries].sort((a, b) =>
@@ -32,7 +32,7 @@ export function exportToCSV(
 
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", filename);
+  link.setAttribute("download", filename + ".csv");
   link.style.visibility = "hidden";
   document.body.appendChild(link);
   link.click();
