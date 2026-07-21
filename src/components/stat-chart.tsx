@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { StatEntry, TimeRange } from "../types";
 import { Calendar, Activity } from "lucide-react";
 import { calculateCheckpoints } from "../utils/checkpoint";
+import { Container } from "./ui/container";
 
 interface StatChartProps {
   entries: StatEntry[];
@@ -284,7 +285,7 @@ export default function StatChart({ entries }: StatChartProps) {
         className="grid grid-cols-2 md:grid-cols-4 gap-3"
         id="stats-metrics-grid"
       >
-        <div className="bg-[#09090b] border border-[#27272a] p-3 rounded flex flex-col gap-1 transition-all duration-200">
+        <Container>
           <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#71717a]">
             <span>Latest Statistic</span>
           </div>
@@ -293,34 +294,34 @@ export default function StatChart({ entries }: StatChartProps) {
               {latestVal !== null ? latestVal : "—"}
             </span>
           </div>
-        </div>
+        </Container>
 
-        <div className="bg-[#09090b] border border-[#27272a] p-3 rounded flex flex-col gap-1 transition-all duration-200">
+        <Container>
           <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#71717a]">
             <span>Range Average</span>
           </div>
           <span className="text-xl font-bold text-[#fafafa] font-mono tracking-tight mt-1">
             {filtered.length ? avgVal.toFixed(1) : "—"}
           </span>
-        </div>
+        </Container>
 
-        <div className="bg-[#09090b] border border-[#27272a] p-3 rounded flex flex-col gap-1 transition-all duration-200">
+        <Container>
           <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#71717a]">
             <span>Highest (Max)</span>
           </div>
           <span className="text-xl font-bold text-[#fafafa] font-mono tracking-tight mt-1">
             {filtered.length ? maxVal : "—"}
           </span>
-        </div>
+        </Container>
 
-        <div className="bg-[#09090b] border border-[#27272a] p-3 rounded flex flex-col gap-1 transition-all duration-200">
+        <Container>
           <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#71717a]">
             <span>Lowest (Min)</span>
           </div>
           <span className="text-xl font-bold text-[#fafafa] font-mono tracking-tight mt-1">
             {filtered.length ? minVal : "—"}
           </span>
-        </div>
+        </Container>
       </div>
 
       {/* Main Chart Card */}

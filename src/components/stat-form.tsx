@@ -1,21 +1,15 @@
-import React, { useState } from "react";
+import { SubmitEvent, useState } from "react";
 import { StatEntry } from "../types";
-import { Plus, Calendar, Hash, AlertCircle, Sparkles } from "lucide-react";
+import { Form } from "./ui/form";
+import { getTodayString } from "../utils";
+import { Input } from "./ui/input";
+import { Checkbox } from "./ui/checkbox";
 
 interface StatFormProps {
-  onAddEntry: (entry: Omit<StatEntry, "id">) => void;
+  onSubmit: (entry: Omit<StatEntry, "id">) => void;
 }
 
-export default function StatForm({ onAddEntry }: StatFormProps) {
-  // Helper to get today's date in YYYY-MM-DD
-  const getTodayString = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
+export default function StatForm({ onSubmit }: StatFormProps) {
   const [date, setDate] = useState(getTodayString());
   const [value, setValue] = useState("");
   const [isCheckpoint, setIsCheckpoint] = useState(false);
@@ -23,9 +17,19 @@ export default function StatForm({ onAddEntry }: StatFormProps) {
   const [eventName, setEventName] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const clearError = () => {
     setError("");
+  };
+  const clearForm = () => {
+    setValue("");
+    setEventName("");
+    setIsCheckpoint(false);
+    setIsEvent(false);
+  };
+
+  const handleSubmit = (e: SubmitEvent) => {
+    e.preventDefault();
+    clearError();
 
     if (!date) {
       setError("Please select a valid date.");
@@ -33,13 +37,11 @@ export default function StatForm({ onAddEntry }: StatFormProps) {
     }
 
     if (isEvent) {
-      console.log(eventName.trim());
       if (!eventName.trim()) {
         setError("Please enter a milestone/event name.");
         return;
       }
-      // Call parent handler for non-statistic checkpoint event
-      onAddEntry({
+      onSubmit({
         date,
         value: null,
         isCheckpoint: false,
@@ -58,8 +60,7 @@ export default function StatForm({ onAddEntry }: StatFormProps) {
         return;
       }
 
-      // Call parent handler for statistic
-      onAddEntry({
+      onSubmit({
         date,
         value: numericValue,
         isCheckpoint,
@@ -67,166 +68,85 @@ export default function StatForm({ onAddEntry }: StatFormProps) {
       });
     }
 
-    // Reset fields but keep date as today for subsequent rapid entry
-    setValue("");
-    setEventName("");
-    setIsCheckpoint(false);
-    setIsEvent(false);
+    clearForm();
+  };
+
+  const onFieldChange = (fieldChangeCb: Function) => {
+    fieldChangeCb();
+    clearError();
   };
 
   return (
-    <form
+    <Form
+      headerTitle="Log New Entry"
+      submitButtonText="Add Entry"
       onSubmit={handleSubmit}
-      className="bg-[#09090b] border border-[#27272a] p-4 rounded-lg flex flex-col gap-4 shadow-xl"
       id="add-entry-form"
+      error={error}
     >
-      <div className="flex">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-[#71717a]">
-          Log New Entry
-        </h3>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Date Input */}
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="input-date"
-            className="text-[10px] font-bold uppercase tracking-wider text-[#71717a] flex items-center gap-1.5"
-          >
-            <Calendar className="w-3.5 h-3.5 text-[#52525b]" />
-            <span>Date</span>
-          </label>
-          <div className="relative">
-            <input
-              id="input-date"
-              type="date"
-              value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
-                setError("");
-              }}
-              className="w-full bg-[#18181b] text-[#fafafa] text-sm font-mono px-3 py-2 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 transition-all cursor-pointer"
-              required
-            />
-          </div>
-        </div>
+        <Input
+          label="Date"
+          id="input-date"
+          type="date"
+          value={date}
+          onChange={(e) => {
+            onFieldChange(() => setDate(e.target.value));
+          }}
+          className="w-full bg-[#18181b] text-[#fafafa] text-sm font-mono px-3 py-2 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 transition-all cursor-pointer"
+          required
+        />
 
-        {/* Dynamic Input: Value or Event Name depending on isEvent */}
         {!isEvent ? (
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="input-value"
-              className="text-[10px] font-bold uppercase tracking-wider text-[#71717a] flex items-center gap-1.5"
-            >
-              <Hash className="w-3.5 h-3.5 text-[#52525b]" />
-              <span>Value</span>
-            </label>
-            <input
-              id="input-value"
-              type="number"
-              step="any"
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-                setError("");
-              }}
-              placeholder="e.g. 450"
-              className="w-full bg-[#18181b] text-[#fafafa] text-sm font-mono px-3 py-2 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 transition-all placeholder-[#3f3f46]"
-              required
-            />
-          </div>
+          <Input
+            id="input-value"
+            type="number"
+            step="any"
+            value={value}
+            onChange={(e) => {
+              onFieldChange(() => setValue(e.target.value));
+            }}
+            placeholder="e.g. 450"
+            required
+            label="Value"
+          />
         ) : (
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="input-event-name"
-              className="text-[10px] font-bold uppercase tracking-wider text-[#71717a] flex items-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Event / Milestone Name</span>
-            </label>
-            <input
-              id="input-event-name"
-              type="text"
-              value={eventName}
-              onChange={(e) => {
-                setEventName(e.target.value);
-                setError("");
-              }}
-              placeholder="e.g. Started new training schedule"
-              className="w-full bg-[#18181b] text-[#fafafa] text-sm font-sans px-3 py-2 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 transition-all placeholder-[#3f3f46]"
-              required
-            />
-          </div>
+          <Input
+            id="input-event-name"
+            label="Event / Milestone Name"
+            type="text"
+            value={eventName}
+            onChange={(e) => {
+              onFieldChange(() => setEventName(e.target.value));
+            }}
+            placeholder="e.g. Started new training schedule"
+            required
+          />
         )}
       </div>
 
-      {/* Checkboxes / Toggles row */}
       <div
         className="flex flex-col sm:flex-row sm:items-center gap-4 py-1"
         id="form-toggles-container"
       >
-        {/* Toggle entry type (Stat vs Event) */}
-        <div className="flex items-center gap-2.5" id="is-event-wrapper">
-          <input
-            type="checkbox"
-            id="input-is-event"
-            checked={isEvent}
-            onChange={(e) => {
-              setIsEvent(e.target.checked);
-              setError("");
-            }}
-            className="w-4 h-4 text-emerald-500 bg-[#18181b] border-[#27272a] rounded focus:ring-emerald-500/20 focus:ring-1 focus:outline-none cursor-pointer"
-          />
-          <label
-            htmlFor="input-is-event"
-            className="text-[11px] font-bold uppercase tracking-wider text-[#a1a1aa] cursor-pointer select-none flex flex-wrap items-center gap-1"
-          >
-            <span>Mark as event</span>
-          </label>
-        </div>
+        <Checkbox
+          id="input-is-event"
+          checked={isEvent}
+          onChange={(e) => {
+            onFieldChange(() => setIsEvent(e.target.checked));
+          }}
+          label="Mark as event"
+        />
 
-        {/* Checkpoint Checkbox (only show if NOT an event) */}
         {!isEvent && (
-          <div className="flex items-center gap-2.5" id="is-checkpoint-wrapper">
-            <input
-              type="checkbox"
-              id="input-is-checkpoint"
-              checked={isCheckpoint}
-              onChange={(e) => setIsCheckpoint(e.target.checked)}
-              className="w-4 h-4 text-blue-600 bg-[#18181b] border-[#27272a] rounded focus:ring-blue-500/20 focus:ring-1 focus:outline-none cursor-pointer"
-            />
-            <label
-              htmlFor="input-is-checkpoint"
-              className="text-[11px] font-bold uppercase tracking-wider text-[#a1a1aa] cursor-pointer select-none flex flex-wrap items-center gap-1"
-            >
-              <span>Mark as a checkpoint</span>
-            </label>
-          </div>
+          <Checkbox
+            id="input-is-checkpoint"
+            checked={isCheckpoint}
+            onChange={(e) => setIsCheckpoint(e.target.checked)}
+            label="Mark as a checkpoint"
+          />
         )}
       </div>
-
-      {/* Validation Error Banner */}
-      {error && (
-        <div
-          className="flex items-center gap-2 text-xs text-rose-400 bg-rose-950/10 border border-rose-900/30 px-3 py-2 rounded"
-          id="form-error-banner"
-        >
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span className="font-mono text-[11px] uppercase tracking-wider">
-            {error}
-          </span>
-        </div>
-      )}
-
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="w-full md:w-auto md:self-end flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white font-medium text-xs px-4 py-2 rounded transition-colors cursor-pointer"
-        id="add-entry-submit-btn"
-      >
-        <Plus className="w-3.5 h-3.5 text-white stroke-[2.5px]" />
-        <span>Add Entry</span>
-      </button>
-    </form>
+    </Form>
   );
 }

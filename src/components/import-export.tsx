@@ -31,15 +31,19 @@ export const ImportExport = ({
     if (!file) return;
 
     const reader = new FileReader();
+
+    reader.readAsArrayBuffer(file);
+
     reader.onload = async (event) => {
       try {
-        const text = event.target?.result;
-        if (!text) {
+        const data = event.target?.result;
+        if (!data) {
           onError("Could not read file content.");
           return;
         }
 
-        const parsed = await importFunc(text);
+        const parsed = await importFunc(data);
+
         if (parsed.length === 0) {
           onError(
             "No valid rows found in the provided file. Make sure it contains Date and Value.",

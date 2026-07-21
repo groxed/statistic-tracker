@@ -14,8 +14,10 @@ export const FileExtensionSelect = ({
       value={value}
       onChange={(e) => onFileExtensionSelect(e.target.value as FileExtension)}
     >
-      {[FileExtension.CSV, FileExtension.XLSX].map((ext) => (
-        <option value={ext}>{ext}</option>
+      {[FileExtension.CSV, FileExtension.XLSX].map((extension) => (
+        <option key={extension} value={extension}>
+          {extension}
+        </option>
       ))}
     </select>
   );
