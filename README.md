@@ -1,20 +1,18 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Statistic tracker
 
-# Run and deploy your AI Studio app
+Track any time-related statistics and events  
+Features:
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/7b35a5f0-085f-498a-b3f3-eee76ac44ab4
+- Excel workbook and CSV export/import
+- Date difference calculator
+- Graph visualization of data
+- History of recorder items
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Run the app:
    `npm run dev`
