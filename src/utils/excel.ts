@@ -1,21 +1,17 @@
 import * as XLSX from "xlsx";
 import { StatEntry } from "../types";
 
-/**
- * Exports statistic entries to a downloadable XLSX file.
- */
 export function exportToXLSX(
   entries: StatEntry[],
   filename = "timeseries_statistics",
 ) {
-  // Sort entries by date before export
-  const sortedEntries = [...entries].sort((a, b) =>
+  const entriesSortedByDate = [...entries].sort((a, b) =>
     a.date.localeCompare(b.date),
   );
 
   const worksheetData = [
     ["Date", "Value", "IsCheckpoint", "IsEvent", "EventName"],
-    ...sortedEntries.map((entry) => [
+    ...entriesSortedByDate.map((entry) => [
       entry.date,
       entry.value ?? "",
       entry.isCheckpoint,
@@ -28,13 +24,9 @@ export function exportToXLSX(
   const workbook = XLSX.utils.book_new();
 
   XLSX.utils.book_append_sheet(workbook, worksheet, "Statistics");
-
   XLSX.writeFile(workbook, filename + ".xlsx");
 }
 
-/**
- * Parses an XLSX file and returns an array of StatEntry items.
- */
 export async function parseXLSX(
   buffer: ArrayBuffer,
 ): Promise<Omit<StatEntry, "id">[]> {

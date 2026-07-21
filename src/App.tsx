@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { StatEntry } from "./types";
-import StatForm from "./components/StatForm";
-import StatChart from "./components/StatChart";
-import StatAccordion from "./components/StatAccordion";
+import StatForm from "./components/stat-form";
+import StatChart from "./components/stat-chart";
+import StatAccordion from "./components/stat-accordion";
 import { formatDateLabel } from "./utils";
 import { Header } from "./components/header";
 import { useNotification } from "./hooks";

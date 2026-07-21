@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FileExtension } from "../constants";
 import { FileExtensionSelect } from "./file-extension-select";
-import { ImportExport } from "./ImportExport";
+import { ImportExport } from "./import-export";
 import { exportToCSV, parseCSV } from "../utils/csv";
 import { exportToXLSX, parseXLSX } from "../utils/excel";
 import { NotificationType } from "../hooks";

@@ -1,1 +1,1 @@
-export * from "./fileExtensions";
+export * from "./file-extensions";
