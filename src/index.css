@@ -12,10 +12,11 @@ body {
   color: #f4f4f5; /* zinc-100 */
 }
 
-select {
-  /* Tells the browser to render native dropdown parts in dark mode */
+* {
   color-scheme: dark;
+}
 
+select {
   /* Standard styling for the visible select box */
   background-color: #121212;
   color: #ffffff;

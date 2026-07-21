@@ -19,7 +19,7 @@ export const Header = ({
   updateEntries,
 }: HeaderProps) => {
   const [fileExtension, setFileExtension] = useState<FileExtension>(
-    FileExtension.CSV,
+    FileExtension.XLSX,
   );
 
   const importEntries = async (buffer: ArrayBuffer | string) => {
@@ -44,7 +44,7 @@ export const Header = ({
 
   return (
     <header className="border-b border-[#27272a] bg-[#09090b] sticky top-0 z-30 px-6 py-4">
-      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="max-w-4xl mx-auto flex sm:items-center gap-4">
         <FileExtensionSelect
           fileExtension={fileExtension}
           onFileExtensionSelect={setFileExtension}

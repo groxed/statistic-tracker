@@ -324,12 +324,10 @@ export default function StatChart({ entries }: StatChartProps) {
         </Container>
       </div>
 
-      {/* Main Chart Card */}
       <div
         className="relative bg-[#09090b] border border-[#27272a] rounded p-4 flex flex-col gap-4"
         id="main-chart-card"
       >
-        {/* Header with Time Selector */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5">
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#71717a] flex items-center gap-2">
@@ -408,7 +406,7 @@ export default function StatChart({ entries }: StatChartProps) {
 
         <div
           ref={containerRef}
-          className="w-full overflow-hidden select-none"
+          className="w-full overflow-x-scroll sm:overflow-hidden select-none"
           id="svg-chart-container"
         >
           {filtered.length === 0 ? (

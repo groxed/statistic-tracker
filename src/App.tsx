@@ -3,9 +3,11 @@ import { StatEntry } from "./types";
 import StatForm from "./components/stat-form";
 import StatChart from "./components/stat-chart";
 import StatAccordion from "./components/stat-accordion";
-import { formatDateLabel } from "./utils";
+import { formatDateLabel, getDefaultFormattedDate } from "./utils";
 import { Header } from "./components/header";
 import { useNotification } from "./hooks";
+import WeeksCalculatorForm from "./components/weeks-calculator-form";
+import { ToastNotification } from "./components/ui/notification";
 
 const STORAGE_KEY = "statistic_tracker_entries";
 
@@ -82,26 +84,7 @@ export default function App() {
       className="min-h-screen bg-[#09090b] text-[#fafafa] flex flex-col font-sans select-none"
       id="applet-viewport"
     >
-      {/* Dynamic Feedback Notification Bar */}
-      {notification.type && (
-        <div
-          className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-3 py-2 rounded border shadow-xl backdrop-blur-md transition-all duration-300 animate-slideDown ${
-            notification.type === "success"
-              ? "bg-[#18181b] border-blue-500/30 text-blue-400 text-xs font-medium"
-              : "bg-[#18181b] border-rose-500/30 text-rose-400 text-xs font-medium"
-          }`}
-          id="toast-notification"
-        >
-          {notification.type === "success" ? (
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
-          ) : (
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
-          )}
-          <span className="font-mono text-[11px] uppercase tracking-wider">
-            {notification.message}
-          </span>
-        </div>
-      )}
+      {notification.type && <ToastNotification notification={notification} />}
 
       <Header
         showNotification={showNotification}
@@ -109,22 +92,22 @@ export default function App() {
         entries={entries}
       />
 
-      {/* Main Container */}
       <main
         className="flex-1 px-6 py-6 max-w-4xl mx-auto w-full flex flex-col gap-6"
         id="applet-main-body"
       >
-        {/* 1. Logger Form (Top section) */}
         <section id="form-section">
-          <StatForm onAddEntry={addEntry} />
+          <StatForm onSubmit={addEntry} />
         </section>
 
-        {/* 2. Visual Trends Chart (Middle section) */}
         <section id="chart-section" className="flex flex-col gap-2">
           <StatChart entries={entries} />
         </section>
 
-        {/* 3. Chronological Accordion List (Bottom section) */}
+        <section id="calculator-section">
+          <WeeksCalculatorForm formatResultDate={getDefaultFormattedDate} />
+        </section>
+
         <section id="accordion-section" className="flex flex-col gap-2">
           <StatAccordion
             entries={entries}
@@ -133,18 +116,6 @@ export default function App() {
           />
         </section>
       </main>
-
-      {/* Footer */}
-      <footer
-        className="px-6 py-4 border-t border-[#27272a] bg-[#09090b] flex flex-col sm:flex-row items-center justify-between text-[10px] text-[#52525b] font-mono gap-2"
-        id="applet-footer"
-      >
-        <div className="flex gap-4">
-          <span>SYSTEM READY</span>
-          <span>DATA SOURCE: LOCAL_SYNC</span>
-        </div>
-        <div>LAST UPDATED: 2026-07-05 UTC</div>
-      </footer>
     </div>
   );
 }

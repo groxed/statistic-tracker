@@ -2,11 +2,13 @@ import { useState } from "react";
 
 export type NotificationType = "success" | "error";
 
+export type ToastNotificationType = {
+  message: string;
+  type: NotificationType | null;
+};
+
 export const useNotification = () => {
-  const [notification, setNotification] = useState<{
-    message: string;
-    type: NotificationType | null;
-  }>({
+  const [notification, setNotification] = useState<ToastNotificationType>({
     message: "",
     type: null,
   });
