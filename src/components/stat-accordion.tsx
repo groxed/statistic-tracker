@@ -266,7 +266,8 @@ export default function StatAccordion({
 														>
 															<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 																<div className="flex flex-col gap-1">
-																	<label className="text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																	<label className="flex flex-col gap-1 text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																		Date
 																		<input
 																			type="date"
 																			value={editDate}
@@ -276,12 +277,12 @@ export default function StatAccordion({
 																			}}
 																			className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-mono"
 																		/>
-																		Date
 																	</label>
 																</div>
 																{!editIsEvent ? (
 																	<div className="flex flex-col gap-1">
-																		<label className="text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																		<label className="flex flex-col gap-1 text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																			Value
 																			<input
 																				type="number"
 																				step="any"
@@ -293,12 +294,12 @@ export default function StatAccordion({
 																				placeholder="Enter value"
 																				className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-mono"
 																			/>
-																			Value
 																		</label>
 																	</div>
 																) : (
-																	<div className="flex flex-col gap-1">
-																		<label className="text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																	<div className="">
+																		<label className="flex flex-col gap-1 text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																			Event Name
 																			<input
 																				type="text"
 																				value={editEventName}
@@ -309,7 +310,6 @@ export default function StatAccordion({
 																				placeholder="Enter event name"
 																				className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-sans"
 																			/>
-																			Event Name
 																		</label>
 																	</div>
 																)}
