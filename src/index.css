@@ -2,25 +2,25 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
-  font-family: var(--font-sans);
-  background-color: #09090b; /* zinc-950 */
-  color: #f4f4f5; /* zinc-100 */
+	font-family: var(--font-sans);
+	background-color: #09090b; /* zinc-950 */
+	color: #f4f4f5; /* zinc-100 */
 }
 
 * {
-  color-scheme: dark;
+	color-scheme: dark;
 }
 
 select {
-  /* Standard styling for the visible select box */
-  background-color: #121212;
-  color: #ffffff;
-  border: 1px solid #333333;
-  padding: 8px;
-  border-radius: 4px;
+	/* Standard styling for the visible select box */
+	background-color: #121212;
+	color: #ffffff;
+	border: 1px solid #333333;
+	padding: 8px;
+	border-radius: 4px;
 }

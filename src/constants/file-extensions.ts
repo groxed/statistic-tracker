@@ -1,4 +1,4 @@
 export enum FileExtension {
-  CSV = ".csv",
-  XLSX = ".xlsx",
+	CSV = ".csv",
+	XLSX = ".xlsx",
 }
