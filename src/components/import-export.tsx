@@ -62,7 +62,9 @@ export const ImportExport = ({
 
 				// Merge imported entries, resolving duplicate dates by overwriting with the imported ones
 				const mergedMap = new Map<string, StatEntry>();
-				newEntries.forEach((e) => mergedMap.set(e.date, e));
+				newEntries.forEach((e) => {
+					mergedMap.set(e.date, e);
+				});
 
 				const mergedList = Array.from(mergedMap.values());
 				onUpdateEntries(mergedList);
@@ -95,6 +97,7 @@ export const ImportExport = ({
 				id="file-selector"
 			/>
 			<button
+				type="button"
 				onClick={handleImportClick}
 				className="flex items-center gap-1.5 text-xs font-medium bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] text-[#a1a1aa] hover:text-[#fafafa] px-3 py-1.5 rounded transition-all cursor-pointer"
 				title={`Upload existing dataset via ${fileExtension}`}
@@ -104,6 +107,7 @@ export const ImportExport = ({
 				<span>Import from {fileExtension}</span>
 			</button>
 			<button
+				type="button"
 				onClick={onExport}
 				className="flex items-center gap-1.5 text-xs font-medium bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] text-[#a1a1aa] hover:text-[#fafafa] px-3 py-1.5 rounded transition-all cursor-pointer"
 				title={`Download entries as ${fileExtension}`}

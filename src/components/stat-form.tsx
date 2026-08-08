@@ -71,7 +71,7 @@ export default function StatForm({ onSubmit }: StatFormProps) {
 		clearForm();
 	};
 
-	const onFieldChange = (fieldChangeCb: Function) => {
+	const onFieldChange = (fieldChangeCb: () => void) => {
 		fieldChangeCb();
 		clearError();
 	};

@@ -34,7 +34,7 @@ export async function parseXLSX(
 
 	const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-	const rows: any[][] = XLSX.utils.sheet_to_json(worksheet, {
+	const rows: unknown[][] = XLSX.utils.sheet_to_json(worksheet, {
 		header: 1,
 		defval: "",
 	});

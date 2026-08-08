@@ -182,6 +182,7 @@ export default function StatAccordion({
 				</h3>
 
 				<button
+					type="button"
 					onClick={() => setIsLatestFirst(!isLatestFirst)}
 					className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#a1a1aa] hover:text-[#fafafa] bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] px-2.5 py-1.5 rounded transition-all"
 					title={
@@ -215,6 +216,7 @@ export default function StatAccordion({
 							>
 								{/* Accordion Trigger Header */}
 								<button
+									type="button"
 									onClick={() => toggleGroup(groupName)}
 									className="w-full flex items-center justify-between px-4 py-3 bg-[#18181b]/30 hover:bg-[#18181b]/60 text-left transition-all duration-150 cursor-pointer"
 									aria-expanded={isExpanded}
@@ -265,50 +267,50 @@ export default function StatAccordion({
 															<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 																<div className="flex flex-col gap-1">
 																	<label className="text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																		<input
+																			type="date"
+																			value={editDate}
+																			onChange={(e) => {
+																				setEditDate(e.target.value);
+																				setEditError("");
+																			}}
+																			className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-mono"
+																		/>
 																		Date
 																	</label>
-																	<input
-																		type="date"
-																		value={editDate}
-																		onChange={(e) => {
-																			setEditDate(e.target.value);
-																			setEditError("");
-																		}}
-																		className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-mono"
-																	/>
 																</div>
 																{!editIsEvent ? (
 																	<div className="flex flex-col gap-1">
 																		<label className="text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																			<input
+																				type="number"
+																				step="any"
+																				value={editValue}
+																				onChange={(e) => {
+																					setEditValue(e.target.value);
+																					setEditError("");
+																				}}
+																				placeholder="Enter value"
+																				className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-mono"
+																			/>
 																			Value
 																		</label>
-																		<input
-																			type="number"
-																			step="any"
-																			value={editValue}
-																			onChange={(e) => {
-																				setEditValue(e.target.value);
-																				setEditError("");
-																			}}
-																			placeholder="Enter value"
-																			className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-mono"
-																		/>
 																	</div>
 																) : (
 																	<div className="flex flex-col gap-1">
 																		<label className="text-[9px] font-bold text-[#71717a] uppercase tracking-wider">
+																			<input
+																				type="text"
+																				value={editEventName}
+																				onChange={(e) => {
+																					setEditEventName(e.target.value);
+																					setEditError("");
+																				}}
+																				placeholder="Enter event name"
+																				className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-sans"
+																			/>
 																			Event Name
 																		</label>
-																		<input
-																			type="text"
-																			value={editEventName}
-																			onChange={(e) => {
-																				setEditEventName(e.target.value);
-																				setEditError("");
-																			}}
-																			placeholder="Enter event name"
-																			className="w-full bg-[#18181b] text-xs text-[#fafafa] px-2.5 py-1.5 rounded border border-[#27272a] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 font-sans"
-																		/>
 																	</div>
 																)}
 															</div>
@@ -364,6 +366,7 @@ export default function StatAccordion({
 
 															<div className="flex items-center gap-2 mt-1">
 																<button
+																	type="button"
 																	onClick={() => handleSaveEdit(entry.id)}
 																	className="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1.5 rounded transition-all"
 																	id={`save-edit-btn-${entry.id}`}
@@ -372,6 +375,7 @@ export default function StatAccordion({
 																	<span>Save Changes</span>
 																</button>
 																<button
+																	type="button"
 																	onClick={handleCancelEdit}
 																	className="flex items-center gap-1 bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] text-[#a1a1aa] text-[10px] font-bold uppercase tracking-wider px-2.5 py-1.5 rounded transition-all"
 																	id={`cancel-edit-btn-${entry.id}`}
@@ -448,6 +452,7 @@ export default function StatAccordion({
 																			Delete?
 																		</span>
 																		<button
+																			type="button"
 																			onClick={() => {
 																				onDeleteEntry(entry.id);
 																				setConfirmDeleteId(null);
@@ -458,6 +463,7 @@ export default function StatAccordion({
 																			Yes
 																		</button>
 																		<button
+																			type="button"
 																			onClick={() => setConfirmDeleteId(null)}
 																			className="bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] text-[#a1a1aa] text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded transition-all"
 																			id={`confirm-delete-no-${entry.id}`}
@@ -468,6 +474,7 @@ export default function StatAccordion({
 																) : (
 																	<>
 																		<button
+																			type="button"
 																			onClick={() => handleStartEdit(entry)}
 																			className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#71717a] hover:text-[#fafafa] bg-[#18181b] border border-[#27272a] hover:bg-[#27272a] px-2.5 py-1.5 rounded transition-all"
 																			title="Edit Entry"
@@ -477,6 +484,7 @@ export default function StatAccordion({
 																			<span>Edit</span>
 																		</button>
 																		<button
+																			type="button"
 																			onClick={() => {
 																				setConfirmDeleteId(entry.id);
 																				setEditingId(null); // Cancel any edits

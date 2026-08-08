@@ -347,6 +347,7 @@ export default function StatChart({ entries }: StatChartProps) {
 						>
 							{ranges.map((r) => (
 								<button
+									type="button"
 									key={r.key}
 									onClick={() => setTimeRange(r.key)}
 									className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded transition-all ${
@@ -390,6 +391,7 @@ export default function StatChart({ entries }: StatChartProps) {
 								</div>
 								{(customStartDate || customEndDate) && (
 									<button
+										type="button"
 										onClick={() => {
 											setCustomStartDate("");
 											setCustomEndDate("");
@@ -417,6 +419,7 @@ export default function StatChart({ entries }: StatChartProps) {
 								No data available for the selected time range.
 							</p>
 							<button
+								type="button"
 								onClick={() => setTimeRange("all")}
 								className="mt-2 text-xs text-blue-500 hover:underline"
 							>
@@ -433,6 +436,7 @@ export default function StatChart({ entries }: StatChartProps) {
 								onMouseMove={handleMouseMove}
 								onMouseLeave={handleMouseLeave}
 								id="timeseries-svg-chart"
+								aria-hidden="true"
 							>
 								<defs>
 									{/* Glowing Area Fill Gradient */}
@@ -470,8 +474,8 @@ export default function StatChart({ entries }: StatChartProps) {
 								/>
 
 								{/* Y-Axis Gridlines */}
-								{yTicks.map((tick, i) => (
-									<g key={`y-grid-${i}`} className="opacity-40">
+								{yTicks.map((tick) => (
+									<g key={`y-grid-${tick.val + tick.y}`} className="opacity-40">
 										<line
 											x1={padding.left}
 											y1={tick.y}
@@ -495,8 +499,8 @@ export default function StatChart({ entries }: StatChartProps) {
 								))}
 
 								{/* X-Axis Ticks & Gridlines */}
-								{xTicks.map((tick, i) => (
-									<g key={`x-tick-${i}`} className="opacity-40">
+								{xTicks.map((tick) => (
+									<g key={`x-tick-${tick.dateStr}`} className="opacity-40">
 										<line
 											x1={tick.x}
 											y1={padding.top}
@@ -554,11 +558,11 @@ export default function StatChart({ entries }: StatChartProps) {
 								{/* Vertical event reference lines */}
 								{points
 									.filter((pt) => pt.entry.isEvent)
-									.map((pt, idx) => {
+									.map((pt) => {
 										const isFuture = pt.entry.date > todayStr;
 										return (
 											<line
-												key={`event-line-${idx}`}
+												key={`event-line-${pt.entry.date + pt.index}`}
 												x1={pt.x}
 												y1={padding.top}
 												x2={pt.x}
@@ -582,7 +586,7 @@ export default function StatChart({ entries }: StatChartProps) {
 										const eventColor = isFuture ? "#f59e0b" : "#10b981";
 										const eventBorderColor = isFuture ? "#d97706" : "#059669";
 										return (
-											<g key={`point-${idx}`}>
+											<g key={`point-${pt.entry.date + pt.index}`}>
 												{/* Interactive hover padding element */}
 												<circle
 													cx={pt.x}
@@ -628,7 +632,7 @@ export default function StatChart({ entries }: StatChartProps) {
 									}
 
 									return (
-										<g key={`point-${idx}`}>
+										<g key={`point-${pt.entry.date + pt.index}`}>
 											{/* Interactive hover padding element */}
 											<circle
 												cx={pt.x}
