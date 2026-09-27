@@ -1,4 +1,4 @@
-import type { ToastNotificationType } from "@/src/hooks";
+import type { ToastNotificationType } from "@/app/hooks";
 
 type ToastNotificationProps = { notification: ToastNotificationType };
 
