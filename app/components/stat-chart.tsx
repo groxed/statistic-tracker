@@ -1,6 +1,6 @@
 import { Activity, Calendar } from "lucide-react";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { StatEntry, TimeRange } from "../types";
 import { calculateCheckpoints } from "../utils/checkpoint";
 import { Container } from "./ui/container";
@@ -104,33 +104,11 @@ export default function StatChart({ entries }: StatChartProps) {
 	const latestVal = allStatEntries.length
 		? allStatEntries[allStatEntries.length - 1].value
 		: null;
-	const _previousVal =
-		allStatEntries.length > 1
-			? allStatEntries[allStatEntries.length - 2].value
-			: null;
 
 	// Padding and margins for the SVG plotting area
 	const padding = { top: 20, right: 35, bottom: 45, left: 55 };
 	const plotWidth = dimensions.width - padding.left - padding.right;
 	const plotHeight = dimensions.height - padding.top - padding.bottom;
-
-	// Render an empty state if not enough data
-	if (entries.length === 0) {
-		return (
-			<div
-				className="flex flex-col items-center justify-center h-64 border border-dashed border-zinc-800 rounded-xl bg-zinc-950/40 text-zinc-500"
-				id="chart-empty-state"
-			>
-				<Activity className="w-10 h-10 mb-3 text-zinc-700 animate-pulse" />
-				<p className="text-sm font-medium">
-					No statistic entries recorded yet.
-				</p>
-				<p className="text-xs text-zinc-600 mt-1">
-					Add an entry above to start charting trends.
-				</p>
-			</div>
-		);
-	}
 
 	// Handle plotting coordinates
 	const parseDateToUnix = (dateStr: string) => new Date(dateStr).getTime();
@@ -201,27 +179,17 @@ export default function StatChart({ entries }: StatChartProps) {
 		const y = padding.top + plotHeight - (i / 3) * plotHeight;
 		return { val: Math.round(val * 10) / 10, y };
 	});
-
-	// X-axis ticks (usually 3 to 5 dates depending on range)
-	let xTicks: { dateStr: string; x: number }[] = [];
-	if (filtered.length > 0) {
+	const xTicks = useMemo((): { dateStr: string; x: number }[] => {
+		if (!filtered.length) return [];
 		if (filtered.length <= 4) {
-			xTicks = points.map((p) => ({ dateStr: p.entry.date, x: p.x }));
-		} else {
-			// Pick dynamic items to show as ticks
-			const stride = Math.max(1, Math.floor(filtered.length / 3));
-			for (let i = 0; i < filtered.length; i += stride) {
-				xTicks.push({ dateStr: filtered[i].date, x: points[i].x });
-			}
-			// Ensure the last one is included
-			if ((filtered.length - 1) % stride !== 0) {
-				xTicks.push({
-					dateStr: filtered[filtered.length - 1].date,
-					x: points[points.length - 1].x,
-				});
-			}
+			return points.map((p) => ({ dateStr: p.entry.date, x: p.x }));
 		}
-	}
+
+		return filtered.map((p, i) => ({
+			dateStr: p.isEvent ? p.date : "",
+			x: points[i].x,
+		}));
+	}, [filtered, points]);
 
 	const formatDateLabel = (dateStr: string) => {
 		const d = new Date(dateStr);
@@ -278,6 +246,24 @@ export default function StatChart({ entries }: StatChartProps) {
 		{ key: "1y", label: "1 Year" },
 		{ key: "custom", label: "Custom" },
 	];
+
+	// Render an empty state if not enough data
+	if (entries.length === 0) {
+		return (
+			<div
+				className="flex flex-col items-center justify-center h-64 border border-dashed border-zinc-800 rounded-xl bg-zinc-950/40 text-zinc-500"
+				id="chart-empty-state"
+			>
+				<Activity className="w-10 h-10 mb-3 text-zinc-700 animate-pulse" />
+				<p className="text-sm font-medium">
+					No statistic entries recorded yet.
+				</p>
+				<p className="text-xs text-zinc-600 mt-1">
+					Add an entry above to start charting trends.
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className="w-full flex flex-col gap-4" id="stats-dashboard-panel">
@@ -439,7 +425,6 @@ export default function StatChart({ entries }: StatChartProps) {
 								aria-hidden="true"
 							>
 								<defs>
-									{/* Glowing Area Fill Gradient */}
 									<linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
 										<stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
 										<stop
@@ -448,7 +433,6 @@ export default function StatChart({ entries }: StatChartProps) {
 											stopOpacity="0.00"
 										/>
 									</linearGradient>
-									{/* Subtle Grid Pattern for Aesthetic Accent */}
 									<pattern
 										id="gridPattern"
 										width="20"
@@ -473,7 +457,6 @@ export default function StatChart({ entries }: StatChartProps) {
 									fill="url(#gridPattern)"
 								/>
 
-								{/* Y-Axis Gridlines */}
 								{yTicks.map((tick) => (
 									<g key={`y-grid-${tick.val + tick.y}`} className="opacity-40">
 										<line
@@ -498,7 +481,6 @@ export default function StatChart({ entries }: StatChartProps) {
 									</g>
 								))}
 
-								{/* X-Axis Ticks & Gridlines */}
 								{xTicks.map((tick) => (
 									<g key={`x-tick-${tick.dateStr}`} className="opacity-40">
 										<line
