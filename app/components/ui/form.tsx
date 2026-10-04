@@ -1,7 +1,7 @@
 import { AlertCircle, Plus } from "lucide-react";
 import type { PropsWithChildren, SubmitEventHandler } from "react";
 import { Button } from "./button";
-import { Icon } from "./icon";
+import { CustomIcon } from "./custom-icon";
 
 type FormProps = {
 	onSubmit: SubmitEventHandler<HTMLFormElement>;
@@ -46,7 +46,7 @@ export const Form = ({
 			)}
 
 			<Button type="submit" id={`${id}-submit-btn`}>
-				<Icon Element={Plus} />
+				<CustomIcon Element={Plus} />
 				<span>{submitButtonText}</span>
 			</Button>
 		</form>

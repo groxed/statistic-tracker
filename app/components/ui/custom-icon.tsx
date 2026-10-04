@@ -1,9 +1,9 @@
 import type { ElementType } from "react";
 
-type IconProps = {
+type CustomIconProps = {
 	Element: ElementType;
 };
 
-export const Icon = ({ Element }: IconProps) => {
+export const CustomIcon = ({ Element }: CustomIconProps) => {
 	return <Element className="w-3.5 h-3.5 text-white stroke-[2.5px]" />;
 };
