@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model events {
+  id   BigInt   @id @default(autoincrement())
+  name String
+  date DateTime @db.Timestamptz(6)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model statistics {
+  id            BigInt   @id @default(autoincrement())
+  value         Float
+  date          DateTime @db.Timestamptz(6)
+  is_checkpoint Boolean  @default(false)
+}
+
+enum entry_type {
+  stat
+  event
+}
